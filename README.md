@@ -11,7 +11,7 @@ environment variables.
 name                        |   value
 --------------------------- | -----------------------
 HOSTNAME                    | hostname of coreos node
-SSHKEY                      | a public key used to login to node (default: ~/.ssh/id_rsa.pub)
+SSHKEY                      | a public key used to login to node -e SSHKEY=$(cat ~/.ssh/id_rsa.pub)
 NAME                        | name of node in etcd cluster
 ADVERTISE_CLIENT_URLS       | http://192.168.11.100:2379
 INITIAL_ADVERTISE_PEER_URLS | http://192.168.11.100:2380
