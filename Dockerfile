@@ -12,11 +12,13 @@ ADD ./create-config-drive /
 
 ADD ./controller-install.sh /
 
+ADD ./setup-controller-node.sh /
+
 ADD ./worker-install.sh /
 
 ADD ./user_data /
 
 RUN chmod 755 /create-config-drive
 
+ENTRYPOINT ["/create-config-drive"]
 CMD /create-config-drive
-

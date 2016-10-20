@@ -14,27 +14,17 @@ coreos:
       command: start
     - name: fleet.service
       command: start
-    - name: "k8s-keys.service"
-      command: "start"
-      content: |
-        [Unit]
-        Description=Kubernetes key generator container
-        Author=Seth Lakowske
-        After=docker.service
-
-        [Service]
-        ExecStart=/usr/bin/docker run -v /:/certs lakowske/k8s-keys /k8s-keys.sh all w1 192.168.11.101
     - name: "k8s-controller-setup.service"
       command: start
       content: |
         [Unit]
         Description=Kubernetes controller setup
-        After=k8s-keys.service
+        After=docker.service
         Requires=docker.service
 
         [Service]
         Environment=ADVERTISE_IP=192.168.11.100
-        ExecStart=/media/configdrive/openstack/latest/controller-install.sh
+        ExecStart=/media/configdrive/openstack/latest/setup-controller-node.sh
 
 ssh_authorized_keys:
   - $SSHKEY
