@@ -1,6 +1,5 @@
 #cloud-config
 
-
 coreos:
   etcd2:
     name: $NAME
@@ -14,17 +13,23 @@ coreos:
       command: start
     - name: fleet.service
       command: start
-    - name: "k8s-controller-setup.service"
+    - name: "k8s-setup.service"
       command: start
       content: |
         [Unit]
-        Description=Kubernetes controller setup
-        After=docker.service
-        Requires=docker.service
-
+        Description=Kubernetes setup
+        After=etcd2.service
+        Requires=etcd2.service
+        
         [Service]
-        Environment=ADVERTISE_IP=192.168.11.100
-        ExecStart=/media/configdrive/openstack/latest/setup-controller-node.sh
+        Restart=on-failure
+        StartLimitInterval=5min
+        StartLimitBurst=4
+        StartLimitAction=reboot-force
+        Environment=ADVERTISE_IP=$ADVERTISE_IP
+        Environment=ETCD_ENDPOINTS=$ETCD_ENDPOINTS
+        Environment=CONTROLLER_ENDPOINT=$CONTROLLER_ENDPOINT
+        ExecStart=/media/configdrive/openstack/latest/setup-node.sh $NODE_TYPE
 
 ssh_authorized_keys:
   - $SSHKEY

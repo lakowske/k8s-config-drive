@@ -2,12 +2,12 @@
 set -e
 
 # List of etcd servers (http://ip:port), comma separated
-export ETCD_ENDPOINTS=
+# export ETCD_ENDPOINTS=
 
 # The endpoint the worker node should use to contact controller nodes (https://ip:port)
 # In HA configurations this should be an external DNS record or loadbalancer in front of the control nodes.
 # However, it is also possible to point directly to a single control node.
-export CONTROLLER_ENDPOINT=
+# export CONTROLLER_ENDPOINT=
 
 # Specify the version (vX.Y.Z) of Kubernetes assets to deploy
 export K8S_VER=v1.4.1_coreos.0

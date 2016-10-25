@@ -10,6 +10,7 @@ This is the basis, but requires some additional environment variables.
 
 name                        |   value
 --------------------------- | -----------------------
+NODE_TYPE                   | <controller | worker>
 HOSTNAME                    | hostname of coreos node
 SSHKEY                      | a public key used to login to node -e SSHKEY=$(cat ~/.ssh/id_rsa.pub)
 NAME                        | name of node in etcd cluster
@@ -18,3 +19,6 @@ INITIAL_ADVERTISE_PEER_URLS | http://192.168.11.100:2380
 TOKEN                       | discovery token (see token url at https://discovery.etcd.io/new?size=3)
 LISTEN_PEER_URLS            | http://192.168.11.100:2380
 LISTEN_CLIENT_URLS          | http://0.0.0.0:2379
+ADVERTISE_IP                | 192.168.11.100
+ETCD_ENDPOINTS              | http://ip:port
+CONTROLLER_ENDPOINT         | https://192.168.11.100:2379

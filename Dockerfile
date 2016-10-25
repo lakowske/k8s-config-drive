@@ -12,9 +12,9 @@ ADD ./create-config-drive /
 
 ADD ./controller-install.sh /
 
-ADD ./setup-controller-node.sh /
-
 ADD ./worker-install.sh /
+
+ADD ./setup-node.sh /
 
 ADD ./user_data /
 
