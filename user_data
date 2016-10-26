@@ -11,8 +11,6 @@ coreos:
   units:
     - name: etcd2.service
       command: start
-    - name: fleet.service
-      command: start
     - name: "k8s-setup.service"
       command: start
       content: |
@@ -29,7 +27,8 @@ coreos:
         Environment=ADVERTISE_IP=$ADVERTISE_IP
         Environment=ETCD_ENDPOINTS=$ETCD_ENDPOINTS
         Environment=CONTROLLER_ENDPOINT=$CONTROLLER_ENDPOINT
-        ExecStart=/media/configdrive/openstack/latest/setup-node.sh $NODE_TYPE
+        Environment=CONTAINER_RUNTIME=docker
+        ExecStart=/media/configdrive/openstack/latest/setup-node.sh $NODE_TYPE $HOSTNAME
 
 ssh_authorized_keys:
   - $SSHKEY
