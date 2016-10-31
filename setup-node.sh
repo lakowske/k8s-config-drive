@@ -14,3 +14,5 @@ case $1 in
     *) echo "$0 <controller|worker>"
        ;;
 esac
+
+echo "done"

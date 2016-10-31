@@ -5,10 +5,21 @@ coreos:
     name: $NAME
     advertise-client-urls: $ADVERTISE_CLIENT_URLS
     initial-advertise-peer-urls: $INITIAL_ADVERTISE_PEER_URLS
-    discovery: https://discovery.etcd.io/$TOKEN
+    initial-cluster: $ETCD_INITIAL_CLUSTER
+    initial-cluster-state: new
+    initial-cluster-token: etcd-cluster-1
     listen-peer-urls: $LISTEN_PEER_URLS
     listen-client-urls: $LISTEN_CLIENT_URLS
   units:
+    - name: 00-eth0.network
+      runtime: true
+      content: |
+        [Match]
+        Name=enp0s8
+
+        [Network]
+        DNS=8.8.8.8
+        Address=$ADVERTISE_IP/24
     - name: etcd2.service
       command: start
     - name: "k8s-setup.service"
@@ -16,14 +27,11 @@ coreos:
       content: |
         [Unit]
         Description=Kubernetes setup
-        After=etcd2.service
         Requires=etcd2.service
-        
+
+
         [Service]
         Restart=on-failure
-        StartLimitInterval=5min
-        StartLimitBurst=4
-        StartLimitAction=reboot-force
         Environment=ADVERTISE_IP=$ADVERTISE_IP
         Environment=ETCD_ENDPOINTS=$ETCD_ENDPOINTS
         Environment=CONTROLLER_ENDPOINT=$CONTROLLER_ENDPOINT
