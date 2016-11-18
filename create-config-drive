@@ -16,7 +16,7 @@ USERDATAVARS='$NAME:$NODE_TYPE:$ADVERTISE_IP:$ADVERTISE_CLIENT_URLS:$INITIAL_ADV
 
 
 #Source any env files.
-for node in *.env; do
+for node in /config-drive/*.env; do
     source $node
 done
 
