@@ -32,3 +32,11 @@ fi
 cat /new-drive/openstack/latest/user_data
 
 mkisofs -R -V config-2 -input-charset utf-8 -o "/iso/$NAME.iso" /new-drive
+
+#maybe tar and send to stdout
+if [ "$CAT_TO_STDOUT" = "" ]
+then
+    echo "Wrote config-drive to /iso. Set CAT_TO_STDOUT environment variable to output the iso to stdout."
+else
+    cat /iso/$NAME.iso
+fi
