@@ -10,6 +10,14 @@ chmod 755 /new-drive/openstack/latest/setup-node.sh
 chmod 755 /new-drive/openstack/latest/controller-install.sh
 chmod 755 /new-drive/openstack/latest/worker-install.sh
 
+#If from stdin, read into /config-drive
+if [ "$FROM_STDIN" = "" ]
+then
+    echo "Reading config-drive from /config-drive. Set FROM_STDIN environment variable to read config tarball."
+else
+    tar -C /config-drive -xvf -
+fi
+
 cp -r /config-drive/* /new-drive/openstack/latest/
 
 USERDATAVARS='$NAME:$NODE_TYPE:$ADVERTISE_IP:$ADVERTISE_CLIENT_URLS:$INITIAL_ADVERTISE_PEER_URLS:$TOKEN:$LISTEN_PEER_URLS:$LISTEN_CLIENT_URLS:$SSHKEY:$HOSTNAME:$ETCD_ENDPOINTS:$CONTROLLER_ENDPOINT:$ETCD_INITIAL_CLUSTER:$ETCD_INITIAL_CLUSTER_STATE'
@@ -31,6 +39,7 @@ fi
 
 cat /new-drive/openstack/latest/user_data
 
+echo "writing /iso/$NAME.iso"
 mkisofs -R -V config-2 -input-charset utf-8 -o "/iso/$NAME.iso" /new-drive
 
 #maybe tar and send to stdout
