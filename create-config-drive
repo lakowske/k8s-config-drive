@@ -2,6 +2,7 @@
 
 mkdir -p /new-drive/openstack/latest
 
+#Copy static bits for setting up kubernetes
 cp /controller-install.sh /new-drive/openstack/latest
 cp /worker-install.sh /new-drive/openstack/latest
 cp /setup-node.sh /new-drive/openstack/latest
@@ -15,13 +16,10 @@ if [ "$FROM_STDIN" = "" ]
 then
     echo "Reading config-drive from /config-drive. Set FROM_STDIN environment variable to read config tarball."
 else
-    tar -C /config-drive -xvf -
+    tar -C /config-drive -xf -
 fi
 
 cp -r /config-drive/* /new-drive/openstack/latest/
-
-USERDATAVARS='$NAME:$NODE_TYPE:$ADVERTISE_IP:$ADVERTISE_CLIENT_URLS:$INITIAL_ADVERTISE_PEER_URLS:$TOKEN:$LISTEN_PEER_URLS:$LISTEN_CLIENT_URLS:$SSHKEY:$HOSTNAME:$ETCD_ENDPOINTS:$CONTROLLER_ENDPOINT:$ETCD_INITIAL_CLUSTER:$ETCD_INITIAL_CLUSTER_STATE'
-
 
 #Source any env files.
 for node in /config-drive/*.env; do
@@ -30,22 +28,17 @@ done
 
 if [ -f /config-drive/user_data ]
 then
-    echo "using user supplied user_data"
-    envsubst "$USERDATAVARS" < /config-drive/user_data > /new-drive/openstack/latest/user_data
+    eval "echo \"$(cat /config-drive/user_data)\"" > /new-drive/openstack/latest/user_data
 else
-    echo "using user_data template"
-    envsubst "$USERDATAVARS" < /user_data > /new-drive/openstack/latest/user_data
+    eval "echo \"$(cat /user_data)\"" > /new-drive/openstack/latest/user_data
 fi
 
-cat /new-drive/openstack/latest/user_data
-
-echo "writing /iso/$NAME.iso"
-mkisofs -R -V config-2 -input-charset utf-8 -o "/iso/$NAME.iso" /new-drive
 
 #maybe tar and send to stdout
 if [ "$CAT_TO_STDOUT" = "" ]
 then
-    echo "Wrote config-drive to /iso. Set CAT_TO_STDOUT environment variable to output the iso to stdout."
+    mkisofs -R -V config-2 -input-charset utf-8 -o "/iso/$NAME.iso" /new-drive
+    echo "Wrote config-drive to /iso/$NAME. Set CAT_TO_STDOUT environment variable to output the iso to stdout."
 else
-    cat /iso/$NAME.iso
+    mkisofs -R -V config-2 -input-charset utf-8 /new-drive
 fi
