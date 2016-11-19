@@ -16,7 +16,7 @@ if [ "$FROM_STDIN" = "" ]
 then
     echo "Reading config-drive from /config-drive. Set FROM_STDIN environment variable to read config tarball."
 else
-    tar -C /config-drive -xf -
+    (cd /config-drive ; tar -xf -)
 fi
 
 cp -r /config-drive/* /new-drive/openstack/latest/
