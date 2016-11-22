@@ -22,9 +22,8 @@ fi
 cp -r /config-drive/* /new-drive/openstack/latest/
 
 #Source any env files.
-for node in /config-drive/*.env; do
-    source $node
-done
+NODE_ENV=/config-drive/$1
+source $NODE_ENV
 
 if [ -f /config-drive/user_data ]
 then
