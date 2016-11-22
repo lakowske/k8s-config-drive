@@ -12,7 +12,7 @@ chmod 755 /new-drive/openstack/latest/controller-install.sh
 chmod 755 /new-drive/openstack/latest/worker-install.sh
 
 #If from stdin, read into /config-drive
-if [ "$FROM_STDIN" = "" ]
+if [ "$FROM_STDIN" = "false" ]
 then
     echo "Reading config-drive from /config-drive. Set FROM_STDIN environment variable to read config tarball."
 else
@@ -22,7 +22,7 @@ fi
 cp -r /config-drive/* /new-drive/openstack/latest/
 
 #Source any env files.
-NODE_ENV=/config-drive/$1
+NODE_ENV=/config-drive/$1.env
 source $NODE_ENV
 
 if [ -f /config-drive/user_data ]
@@ -34,7 +34,7 @@ fi
 
 
 #maybe tar and send to stdout
-if [ "$CAT_TO_STDOUT" = "" ]
+if [ "$CAT_TO_STDOUT" = "false" ]
 then
     mkisofs -R -V config-2 -input-charset utf-8 -o "/iso/$NAME.iso" /new-drive
     echo "Wrote config-drive to /iso/$NAME. Set CAT_TO_STDOUT environment variable to output the iso to stdout."
